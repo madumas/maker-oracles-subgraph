@@ -7,7 +7,6 @@ import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgr
 import {MakerOSM} from "../generated/templates";
 
 export function handleLogValue(event: LogValue): void {
-
   MakerOSM.create(event.address);
   let contract = OSM.bind(Address.fromString(event.address.toHexString()));
   let price = new OSMPrice(event.address.toHexString());

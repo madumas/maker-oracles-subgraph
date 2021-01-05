@@ -61,7 +61,7 @@ templates:
       entities:
         - MedianizerPrice
         - Feed
-        - Consumer
+        - MedianizerConsumer
       abis:
         - name: Medianizer
           file: ./abis/Medianizer.json
@@ -88,7 +88,7 @@ templates:
       file: ./src/osmMapping.ts
       entities:
         - OSM
-        - Consumer
+        - OSMConsumer
       abis:
         - name: OSM
           file: ./abis/OSM.json
