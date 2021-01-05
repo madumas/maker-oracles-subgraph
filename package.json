@@ -4,12 +4,12 @@
   "repository": "https://github.com/madumas/maker-oracles-subgraph",
   "license": "MIT",
   "scripts": {
-    "create": "graph create maker-oracles-subgraph --node https://api.thegraph.com/deploy/",
-    "create-local": "graph create maker-oracles-subgraph --node http://127.0.0.1:8020",
+    "create": "graph create maker-oracles --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create maker-oracles --node http://127.0.0.1:8020",
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy maker-oracles-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy-local": "graph deploy maker-oracles-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+    "deploy": "graph deploy maker-oracles --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local": "graph deploy maker-oracles --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.19.0",
