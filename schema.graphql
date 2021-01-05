@@ -6,6 +6,7 @@ type OSMPrice @entity {
   medianizer: MedianizerPrice
   name: String
   curValue: BigDecimal
+  nextValue: BigDecimal
 }
 
 type MedianizerPrice @entity {

@@ -20,18 +20,21 @@ export function handleLogValue(event: LogValue): void {
 
   price.medianizer = contract.src().toHex();
 
-  let medianizerContract = Medianizer.bind(Address.fromString(contract.src().toHexString()));
-  let callResult = medianizerContract.try_wat();
-  if (callResult.reverted) {
-    log.info("wat() reverted", [])
+  //let medianizerContract = Medianizer.bind(Address.fromString(contract.src().toHexString()));
+  let medianizerEntity = Medianizer.load(Address.fromString(contract.src().toHexString()));
+  //let callResult = medianizerContract.try_wat();
+  if (medianizerEntity == null) {
+    log.info("no associated medianizer", [])
   } else {
-    price.name = medianizerContract.wat().toString();
+
+    price.name = medianizerEntity.name;
     let amount = decimal.max(
         decimal.ZERO,
         decimal.fromBigInt(bytes.toUnsignedInt(event.params.val), DEFAULT_DECIMALS)
     );
     //let value = BigInt.fromUnsignedBytes(event.params.val);
     price.curValue = amount;
+    price.nextValue = medianizerEntity.curValue;
     price.save();
   }
 }
