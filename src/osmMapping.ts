@@ -25,6 +25,7 @@ export function handleLogValue(event: LogValue): void {
   );
   //let value = BigInt.fromUnsignedBytes(event.params.val);
   price.curValue = amount;
+  price.nextTimestamp = event.block.timestamp.plus(BigInt.fromI32(contract.hop()));
 
   //let medianizerContract = Medianizer.bind(Address.fromString(contract.src().toHexString()));
   let medianizerEntity = MedianizerPrice.load(contract.src().toHexString());

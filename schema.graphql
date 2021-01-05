@@ -6,6 +6,7 @@ type OSMPrice @entity {
   medianizer: MedianizerPrice
   curValue: BigDecimal
   nextValue: BigDecimal
+  nextTimestamp: BigInt
 }
 
 type MedianizerPrice @entity {
