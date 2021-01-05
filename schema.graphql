@@ -18,6 +18,7 @@ type MedianizerPrice @entity {
   curValue: BigDecimal
   feeds: [Feed!]! @derivedFrom(field: "medianizer")
   osm: [OSMPrice!] @derivedFrom(field: "medianizer")
+  consumers: [Consumer!] @derivedFrom(field: "medianizer")
 }
 
 type Feed @entity {
@@ -29,4 +30,9 @@ type Feed @entity {
   v: Int
   r: Bytes
   s: Bytes
+}
+
+type Consumer @entity {
+  id: ID!
+  medianizer: MedianizerPrice
 }

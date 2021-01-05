@@ -67,3 +67,11 @@ templates:
       callHandlers:
         - function: poke(uint256[],uint256[],uint8[],bytes32[],bytes32[])
           handler: handlePoke
+        - function: kiss(address)
+          handler: handleKiss
+        - function: kiss(address[])
+          handler: handleKisses
+        - function: diss(address)
+          handler: handleDiss
+        - function: diss(address[])
+          handler: handleDiss

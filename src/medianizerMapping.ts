@@ -1,7 +1,7 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
-import { LogMedianPrice, Medianizer, PokeCall } from '../generated/MakerOSM/Medianizer'
-import { OSMPrice, MedianizerPrice, Feed } from '../generated/schema'
+import {KissCall, Kiss1Call, DissCall, Diss1Call, LogMedianPrice, Medianizer, PokeCall} from '../generated/MakerOSM/Medianizer'
+import {OSMPrice, MedianizerPrice, Feed, Consumer} from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
 import {MakerMedianizer} from "../generated/templates";
 
@@ -36,10 +36,6 @@ export function handleMedianPrice(event: LogMedianPrice): void {
 
 export function handlePoke(call: PokeCall): void {
     let id = call.to.toHex();
-    let price = MedianizerPrice.load(call.to.toHexString());
-    if (price == null) {
-        price = new MedianizerPrice(id);
-    }
 
     let i=0;
     for(; i<call.inputs.val_.length; i++)  {
@@ -77,6 +73,54 @@ export function handlePoke(call: PokeCall): void {
         feed.medianizer="";
         feed.save();
     }
+}
 
 
+export function handleKiss(call: Kiss1Call): void {
+    let medianizerId = call.to.toHex();
+    let consumerAddr = call.inputs.a;
+    let consumer = Consumer.load(medianizerId+"-"+consumerAddr.toHexString());
+    if (consumer == null) {
+        consumer = new Consumer(medianizerId+"-"+consumerAddr.toHexString());
+    }
+    consumer.medianizer = medianizerId;
+    consumer.save();
+}
+
+export function handleKisses(call: KissCall): void {
+
+    let consumerAddresses = call.inputs.a;
+    consumerAddresses.forEach( consumerAddr => {
+        let medianizerId = call.to.toHex();
+        let consumer = Consumer.load(medianizerId+"-"+consumerAddr.toHexString());
+        if (consumer == null) {
+            consumer = new Consumer(medianizerId+"-"+consumerAddr.toHexString());;
+        }
+        consumer.medianizer = medianizerId;
+        consumer.save();
+    });
+}
+
+
+export function handleDiss(call: Diss1Call): void {
+    let medianizerId = call.to.toHex();
+    let consumerAddr = call.inputs.a;
+    let consumer = Consumer.load(medianizerId+"-"+consumerAddr.toHexString());
+    if (consumer !== null) {
+        consumer.medianizer = "";
+        consumer.save();
+    }
+}
+
+export function handleDisses(call: DissCall): void {
+
+    let consumerAddresses = call.inputs.a;
+    consumerAddresses.forEach( consumerAddr => {
+        let medianizerId = call.to.toHex();
+        let consumer = Consumer.load(medianizerId+"-"+consumerAddr.toHexString());
+        if (consumer !== null) {
+            consumer.medianizer = "";
+            consumer.save();
+        }
+    });
 }
