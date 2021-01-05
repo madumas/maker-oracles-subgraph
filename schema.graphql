@@ -34,5 +34,6 @@ type Feed @entity {
 
 type Consumer @entity {
   id: ID!
+  address: Bytes
   medianizer: MedianizerPrice
 }

@@ -83,6 +83,7 @@ export function handleKiss(call: Kiss1Call): void {
     if (consumer == null) {
         consumer = new Consumer(medianizerId+"-"+consumerAddr.toHexString());
     }
+    consumer.address = consumerAddr;
     consumer.medianizer = medianizerId;
     consumer.save();
 }
@@ -96,6 +97,7 @@ export function handleKisses(call: KissCall): void {
         if (consumer == null) {
             consumer = new Consumer(medianizerId+"-"+consumerAddr.toHexString());;
         }
+        consumer.address = consumerAddr;
         consumer.medianizer = medianizerId;
         consumer.save();
     });
