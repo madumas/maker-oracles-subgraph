@@ -9,6 +9,11 @@ export function handleLogValue(event: LogValue): void {
   let contract = OSM.bind(Address.fromString(event.address.toHexString()));
   let price = new Price(event.address.toHexString() + "-" + event.transaction.hash.toHexString());
   price.address = event.address;
+  let checkSource = contract.try_src();
+  if (checkSource.reverted) {
+      log.info("not an OSM", []);
+      return;
+  }
   price.source = contract.src();
 
   let medianizerContract = Medianizer.bind(Address.fromString(price.source.toHexString()));
