@@ -1,7 +1,7 @@
 import { log, store } from '@graphprotocol/graph-ts'
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { LogValue, OSM } from '../generated/MakerOSM/OSM'
-import {Diss1Call, DissCall, Kiss1Call, KissCall, Medianizer} from '../generated/MakerOSM/Medianizer'
+import {Diss1Call, DissCall, Kiss1Call, KissCall} from '../generated/MakerOSM/OSM'
 import {OSMPrice, MedianizerPrice, OSMConsumer} from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
 import {MakerOSM} from "../generated/templates";
