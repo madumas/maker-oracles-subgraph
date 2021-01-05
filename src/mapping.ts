@@ -1,5 +1,5 @@
 import { log } from '@graphprotocol/graph-ts'
-import { Address, BigDecimal } from '@graphprotocol/graph-ts'
+import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { LogValue, OSM } from '../generated/MakerOSM/OSM'
 import { Medianizer } from '../generated/MakerOSM/Medianizer'
 import { Price } from '../generated/schema'
@@ -22,7 +22,8 @@ export function handleLogValue(event: LogValue): void {
     log.info("wat() reverted", [])
   } else {
     price.name = medianizerContract.wat().toString();
-    price.curValue = BigDecimal.fromString(event.params.val.toString());
+    let value = BigInt.fromUnsignedBytes(event.params.val);
+    price.curValue = value;
     price.save();
   }
 }
