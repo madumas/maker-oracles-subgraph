@@ -46,7 +46,24 @@ dataSources:
       eventHandlers:
         - event: LogMedianPrice(uint256,uint256)
           handler: handleMedianPrice
+      file: ./src/medianizerMapping.ts
+templates:
+  - name: MakerMedianizer
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Medianizer
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/medianizerMapping.ts
+      entities:
+        - MedianizerPrice
+        - Feed
+      abis:
+        - name: Medianizer
+          file: ./abis/Medianizer.json
       callHandlers:
         - function: poke(uint256[],uint256[],uint8[],bytes32[],bytes32[])
           handler: handlePoke
-      file: ./src/medianizerMapping.ts

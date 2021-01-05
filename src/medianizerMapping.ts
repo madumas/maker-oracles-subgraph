@@ -3,8 +3,12 @@ import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { LogMedianPrice, Medianizer, PokeCall } from '../generated/MakerOSM/Medianizer'
 import { OSMPrice, MedianizerPrice, Feed } from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
+import {MakerMedianizer} from "../generated/templates";
 
 export function handleMedianPrice(event: LogMedianPrice): void {
+
+  MakerMedianizer.create(event.address);
+
   let medianizerContract = Medianizer.bind(Address.fromString(event.address.toHexString()));
 
   let price = MedianizerPrice.load(event.address.toHexString());
