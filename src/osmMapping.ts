@@ -2,11 +2,13 @@ import { log, store } from '@graphprotocol/graph-ts'
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { LogValue, OSM } from '../generated/MakerOSM/OSM'
 import {Diss1Call, DissCall, Kiss1Call, KissCall, Medianizer} from '../generated/MakerOSM/Medianizer'
-import {OSMPrice, MedianizerPrice, Consumer} from '../generated/schema'
+import {OSMPrice, MedianizerPrice, OSMConsumer} from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
+import {MakerOSM} from "../generated/templates";
 
 export function handleLogValue(event: LogValue): void {
-  //log.info('event', [event.toString()]);
+
+  MakerOSM.create(event.address);
   let contract = OSM.bind(Address.fromString(event.address.toHexString()));
   let price = new OSMPrice(event.address.toHexString());
   price.updatedTimeStamp = event.block.timestamp;
@@ -39,14 +41,14 @@ export function handleLogValue(event: LogValue): void {
 }
 
 export function handleKiss(call: Kiss1Call): void {
-  let medianizerId = call.to.toHex();
+  let osmId = call.to.toHex();
   let consumerAddr = call.inputs.a;
-  let consumer = Consumer.load(medianizerId+"-"+consumerAddr.toHexString());
+  let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
   if (consumer == null) {
-    consumer = new Consumer(medianizerId+"-"+consumerAddr.toHexString());
+    consumer = new OSMConsumer(osmId+"-"+consumerAddr.toHexString());
   }
   consumer.address = consumerAddr;
-  consumer.medianizer = medianizerId;
+  consumer.osm = osmId;
   consumer.save();
 }
 
@@ -54,36 +56,35 @@ export function handleKisses(call: KissCall): void {
 
   let consumerAddresses = call.inputs.a;
   consumerAddresses.forEach( consumerAddr => {
-    let medianizerId = call.to.toHex();
-    let consumer = Consumer.load(medianizerId+"-"+consumerAddr.toHexString());
+    let osmId = call.to.toHex();
+    let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
     if (consumer == null) {
-      consumer = new Consumer(medianizerId+"-"+consumerAddr.toHexString());;
+      consumer = new OSMConsumer(osmId+"-"+consumerAddr.toHexString());;
     }
     consumer.address = consumerAddr;
-    consumer.medianizer = medianizerId;
+    consumer.osm = osmId;
     consumer.save();
   });
 }
 
 
 export function handleDiss(call: Diss1Call): void {
-  let medianizerId = call.to.toHex();
+  let osmId = call.to.toHex();
   let consumerAddr = call.inputs.a;
-  let consumer = Consumer.load(medianizerId+"-"+consumerAddr.toHexString());
+  let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
   if (consumer !== null) {
-    consumer.medianizer = "";
+    consumer.osm = "";
     consumer.save();
   }
 }
 
 export function handleDisses(call: DissCall): void {
-
   let consumerAddresses = call.inputs.a;
   consumerAddresses.forEach( consumerAddr => {
-    let medianizerId = call.to.toHex();
-    let consumer = Consumer.load(medianizerId+"-"+consumerAddr.toHexString());
+    let osmId = call.to.toHex();
+    let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
     if (consumer !== null) {
-      consumer.medianizer = "";
+      consumer.osm = "";
       consumer.save();
     }
   });
