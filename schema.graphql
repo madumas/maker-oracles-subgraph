@@ -26,4 +26,7 @@ type Feed @entity {
   updatedTimeStamp: BigInt
   curValue: BigDecimal
   active: Boolean
+  v: Int
+  r: Bytes
+  s: Bytes
 }
