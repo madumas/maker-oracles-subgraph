@@ -1,11 +1,10 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
-import { LogValue, OSM } from '../generated/MakerOSM/OSM'
-import { Medianizer } from '../generated/MakerOSM/Medianizer'
+import { LogMedianPrice, Medianizer } from '../generated/MakerOSM/Medianizer'
 import { OSMPrice, MedianizerPrice } from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
 
-export function handleMedianPrice(event: LogValue): void {
+export function handleMedianPrice(event: LogMedianPrice): void {
   let medianizerContract = Medianizer.bind(Address.fromString(event.address.toHexString()));
   let price = new MedianizerPrice(event.address.toHexString());
   price.updatedTimeStamp = event.block.timestamp;
@@ -19,7 +18,7 @@ export function handleMedianPrice(event: LogValue): void {
     price.name = medianizerContract.wat().toString();
     let amount = decimal.max(
         decimal.ZERO,
-        decimal.fromBigInt(new BigInt(event.params.val.toU32()), DEFAULT_DECIMALS)
+        decimal.fromBigInt(event.params.val, DEFAULT_DECIMALS)
     );
     price.curValue = amount;
     price.save();
