@@ -1,7 +1,7 @@
 type Price @entity {
   id: ID!
-  address: Bytes!
-  source: Bytes!
-  name: String!
-  curValue: BigDecimal!
+  address: Bytes
+  source: Bytes
+  name: String
+  curValue: BigDecimal
 }

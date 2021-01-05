@@ -10,8 +10,14 @@ export function handleLogValue(event: LogValue): void {
   let price = new Price(event.address.toHexString() + "-" + event.transaction.hash.toHexString());
   price.address = event.address;
   price.source = contract.src();
+
   let medianizerContract = Medianizer.bind(Address.fromString(price.source.toHexString()));
-  price.name = medianizerContract.wat().toString();
-  price.curValue = BigDecimal.fromString(event.params.val.toString());
-  price.save();
+  let callResult = medianizerContract.try_wat();
+  if (callResult.reverted) {
+    log.info("wat() reverted", [])
+  } else {
+    price.name = medianizerContract.wat().toString();
+    price.curValue = BigDecimal.fromString(event.params.val.toString());
+    price.save();
+  }
 }
