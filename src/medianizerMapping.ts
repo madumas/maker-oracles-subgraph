@@ -19,7 +19,7 @@ export function handleMedianPrice(event: LogValue): void {
     price.name = medianizerContract.wat().toString();
     let amount = decimal.max(
         decimal.ZERO,
-        decimal.fromBigInt(bytes.toUnsignedInt(event.params.val), DEFAULT_DECIMALS)
+        decimal.fromBigInt(new BigInt(event.params.val.toU32()), DEFAULT_DECIMALS)
     );
     price.curValue = amount;
     price.save();
