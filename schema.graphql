@@ -3,5 +3,5 @@ type Price @entity {
   address: Bytes
   source: Bytes
   name: String
-  curValue: BigInt
+  curValue: BigDecimal
 }
