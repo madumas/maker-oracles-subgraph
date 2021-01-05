@@ -4,5 +4,4 @@ type Price @entity {
   source: Bytes!
   name: String!
   curValue: BigDecimal!
-  nextValue: BigDecimal!
 }
