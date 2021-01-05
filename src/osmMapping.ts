@@ -1,4 +1,4 @@
-import { log } from '@graphprotocol/graph-ts'
+import { log, store } from '@graphprotocol/graph-ts'
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { LogValue, OSM } from '../generated/MakerOSM/OSM'
 import { Medianizer } from '../generated/MakerOSM/Medianizer'
@@ -21,7 +21,7 @@ export function handleLogValue(event: LogValue): void {
   price.medianizer = contract.src().toHex();
 
   //let medianizerContract = Medianizer.bind(Address.fromString(contract.src().toHexString()));
-  let medianizerEntity = Medianizer.load(Address.fromString(contract.src().toHexString()));
+  let medianizerEntity = MedianizerPrice.load(contract.src().toHexString());
   //let callResult = medianizerContract.try_wat();
   if (medianizerEntity == null) {
     log.info("no associated medianizer", [])
