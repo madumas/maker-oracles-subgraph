@@ -1,7 +1,18 @@
-type Price @entity {
+type OSMPrice @entity {
   id: ID!
-  address: Bytes
-  source: Bytes
+  updatedTimeStamp: BigInt
+  updatedBlockNumber: BigInt
+  transactionHash: Bytes
+  medianizer: MedianizerPrice
+  name: String
+  curValue: BigDecimal
+}
+
+type MedianizerPrice @entity {
+  id: ID!
+  updatedTimeStamp: BigInt
+  updatedBlockNumber: BigInt
+  transactionHash: Bytes
   name: String
   curValue: BigDecimal
 }

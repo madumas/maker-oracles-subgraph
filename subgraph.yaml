@@ -15,7 +15,7 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - Price
+        - OSMPrice
       abis:
         - name: OSM
           file: ./abis/OSM.json
@@ -24,4 +24,25 @@ dataSources:
       eventHandlers:
         - event: LogValue(bytes32)
           handler: handleLogValue
-      file: ./src/mapping.ts
+      file: ./src/osmMapping.ts
+  - kind: ethereum/contract
+    name: MakerMedianizer
+    network: mainnet
+    source:
+      abi: Medianizer
+      startBlock: 8925094
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MedianizerPrice
+      abis:
+        - name: OSM
+          file: ./abis/OSM.json
+        - name: Medianizer
+          file: ./abis/Medianizer.json
+      eventHandlers:
+        - event: LogMedianPrice(uint256,uint256)
+          handler: handleMedianPrice
+      file: ./src/medianizerMapping.ts
