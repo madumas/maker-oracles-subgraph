@@ -8,7 +8,7 @@ import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgr
 export function handleLogValue(event: LogValue): void {
   //log.info('event', [event.toString()]);
   let contract = OSM.bind(Address.fromString(event.address.toHexString()));
-  let price = new Price(event.address.toHexString() + "-" + event.transaction.hash.toHexString());
+  let price = new Price(event.address.toHexString());
   price.address = event.address;
   let checkSource = contract.try_src();
   if (checkSource.reverted) {
