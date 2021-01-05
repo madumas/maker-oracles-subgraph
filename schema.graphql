@@ -4,7 +4,6 @@ type OSMPrice @entity {
   updatedBlockNumber: BigInt
   transactionHash: Bytes
   medianizer: MedianizerPrice
-  name: String
   curValue: BigDecimal
   nextValue: BigDecimal
 }
@@ -16,4 +15,14 @@ type MedianizerPrice @entity {
   transactionHash: Bytes
   name: String
   curValue: BigDecimal
+  feeds: [Feed!]! @derivedFrom(field: "medianizer")
+  osm: [OSMPrice!] @derivedFrom(field: "medianizer")
+}
+
+type Feed @entity {
+  id: ID!
+  medianizer: MedianizerPrice
+  updatedTimeStamp: BigInt
+  curValue: BigDecimal
+  active: Boolean
 }

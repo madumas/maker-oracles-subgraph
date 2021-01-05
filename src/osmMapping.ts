@@ -19,6 +19,12 @@ export function handleLogValue(event: LogValue): void {
   }
 
   price.medianizer = contract.src().toHex();
+  let amount = decimal.max(
+      decimal.ZERO,
+      decimal.fromBigInt(bytes.toUnsignedInt(event.params.val), DEFAULT_DECIMALS)
+  );
+  //let value = BigInt.fromUnsignedBytes(event.params.val);
+  price.curValue = amount;
 
   //let medianizerContract = Medianizer.bind(Address.fromString(contract.src().toHexString()));
   let medianizerEntity = MedianizerPrice.load(contract.src().toHexString());
@@ -26,14 +32,6 @@ export function handleLogValue(event: LogValue): void {
   if (medianizerEntity == null) {
     log.info("no associated medianizer", [])
   } else {
-
-    price.name = medianizerEntity.name;
-    let amount = decimal.max(
-        decimal.ZERO,
-        decimal.fromBigInt(bytes.toUnsignedInt(event.params.val), DEFAULT_DECIMALS)
-    );
-    //let value = BigInt.fromUnsignedBytes(event.params.val);
-    price.curValue = amount;
     price.nextValue = medianizerEntity.curValue;
     price.save();
   }

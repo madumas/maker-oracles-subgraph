@@ -1,12 +1,16 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
-import { LogMedianPrice, Medianizer } from '../generated/MakerOSM/Medianizer'
-import { OSMPrice, MedianizerPrice } from '../generated/schema'
+import { LogMedianPrice, Medianizer, PokeCall } from '../generated/MakerOSM/Medianizer'
+import { OSMPrice, MedianizerPrice, Feed } from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
 
 export function handleMedianPrice(event: LogMedianPrice): void {
   let medianizerContract = Medianizer.bind(Address.fromString(event.address.toHexString()));
-  let price = new MedianizerPrice(event.address.toHexString());
+
+  let price = MedianizerPrice.load(event.address.toHexString());
+  if (price == null) {
+    price = new MedianizerPrice(event.address.toHexString());
+  }
   price.updatedTimeStamp = event.block.timestamp;
   price.updatedBlockNumber = event.block.number;
   price.transactionHash = event.transaction.hash;
@@ -23,4 +27,16 @@ export function handleMedianPrice(event: LogMedianPrice): void {
     price.curValue = amount;
     price.save();
   }
+}
+
+export function handlePoke(call: PokeCall): void {
+    let id = call.to.toHex();
+    let price = MedianizerPrice.load(call.to.toHexString());
+
+    let feed = new Feed(id+"-"+call.block.number.toString());
+    if (price == null) {
+        price = new MedianizerPrice(id);
+    }
+    feed.medianizer= call.to.toHexString();
+
 }

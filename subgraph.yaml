@@ -37,6 +37,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - MedianizerPrice
+        - Feed
       abis:
         - name: OSM
           file: ./abis/OSM.json
@@ -45,4 +46,7 @@ dataSources:
       eventHandlers:
         - event: LogMedianPrice(uint256,uint256)
           handler: handleMedianPrice
+      callHandlers:
+        - function: poke(uint256[],uint256[],uint8[],bytes32[],bytes32[])
+          handler: handlePoke
       file: ./src/medianizerMapping.ts
