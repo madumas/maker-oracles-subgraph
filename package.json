@@ -1,10 +1,9 @@
 {
-  "name": "example",
+  "name": "maker-oracles-subgraph",
   "version": "0.1.0",
-  "repository": "https://github.com/graphprotocol/example-subgraph",
+  "repository": "https://github.com/madumas/maker-oracles-subgraph",
   "license": "MIT",
   "scripts": {
-    "build-contract": "solc contracts/Gravity.sol --abi -o abis --overwrite && solc contracts/Gravity.sol --bin -o bin --overwrite",
     "create": "graph create example --node https://api.thegraph.com/deploy/",
     "create-local": "graph create example --node http://127.0.0.1:8020",
     "codegen": "graph codegen",
