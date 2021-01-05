@@ -4,6 +4,8 @@ import { LogMedianPrice, Medianizer, PokeCall } from '../generated/MakerOSM/Medi
 import { OSMPrice, MedianizerPrice, Feed } from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
 import {MakerMedianizer} from "../generated/templates";
+//import {ecrecover, keccak256, keccakFromHexString} from 'ethereumjs-util'
+
 
 export function handleMedianPrice(event: LogMedianPrice): void {
 
@@ -36,11 +38,29 @@ export function handleMedianPrice(event: LogMedianPrice): void {
 export function handlePoke(call: PokeCall): void {
     let id = call.to.toHex();
     let price = MedianizerPrice.load(call.to.toHexString());
-
-    let feed = new Feed(id+"-"+call.block.number.toString());
     if (price == null) {
         price = new MedianizerPrice(id);
     }
-    feed.medianizer= call.to.toHexString();
+    for(let i=0; i<call.inputs.val_.length; i++)  {
+        let valA = call.inputs.val_;
+        let ageA = call.inputs.age_;
+        let vA = call.inputs.v;
+        let rA = call.inputs.r;
+        let sA = call.inputs.s;
+        let val = valA[i];
+        let age = ageA[i];
+        let v = vA[i];
+        let r = rA[i];
+        let s = sA[i];
+        //let hash = keccakFromHexString("0x"+val+age+price.name, 256);
+        let feed = new Feed(id+"-"+call.block.number.toString()+'-'+s.toHexString());
+        feed.medianizer = call.to.toHexString();
+        feed.curValue = decimal.max(
+            decimal.ZERO,
+            decimal.fromBigInt(val, DEFAULT_DECIMALS)
+        );
+        feed.updatedTimeStamp = age;
+        feed.save();
+    }
 
 }
