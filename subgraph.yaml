@@ -9,7 +9,7 @@ dataSources:
     network: mainnet
     source:
       abi: OSM
-      startBlock: 8925094
+      startBlock: 11590000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -30,7 +30,7 @@ dataSources:
     network: mainnet
     source:
       abi: Medianizer
-      startBlock: 8925094
+      startBlock: 11590000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
