@@ -1,6 +1,6 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Address, BigInt} from '@graphprotocol/graph-ts'
-import {KissCall, Kiss1Call, DissCall, Diss1Call, LogMedianPrice, Medianizer, PokeCall} from '../generated/MakerOSM/Medianizer'
+import {KissCall, Kiss1Call, DissCall, Diss1Call, LogMedianPrice, Medianizer, PokeCall} from '../generated/MakerMedianizer/Medianizer'
 import {OSMPrice, MedianizerPrice, Feed, MedianizerConsumer} from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
 import {MakerMedianizer} from "../generated/templates";

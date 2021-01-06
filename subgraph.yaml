@@ -19,8 +19,6 @@ dataSources:
       abis:
         - name: OSM
           file: ./abis/OSM.json
-        - name: Medianizer
-          file: ./abis/Medianizer.json
       eventHandlers:
         - event: LogValue(bytes32)
           handler: handleLogValue
@@ -39,8 +37,6 @@ dataSources:
         - MedianizerPrice
         - Feed
       abis:
-        - name: OSM
-          file: ./abis/OSM.json
         - name: Medianizer
           file: ./abis/Medianizer.json
       eventHandlers:
@@ -75,7 +71,7 @@ templates:
         - function: diss(address)
           handler: handleDiss
         - function: diss(address[])
-          handler: handleDiss
+          handler: handleDisses
   - name: MakerOSM
     kind: ethereum/contract
     network: mainnet
@@ -100,4 +96,4 @@ templates:
         - function: diss(address)
           handler: handleDiss
         - function: diss(address[])
-          handler: handleDiss
+          handler: handleDisses

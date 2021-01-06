@@ -1,13 +1,13 @@
-import { log, store } from '@graphprotocol/graph-ts'
-import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
+import { log } from '@graphprotocol/graph-ts'
+import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { LogValue, OSM } from '../generated/MakerOSM/OSM'
 import {Diss1Call, DissCall, Kiss1Call, KissCall} from '../generated/MakerOSM/OSM'
 import {OSMPrice, MedianizerPrice, OSMConsumer} from '../generated/schema'
-import { bytes, decimal, DEFAULT_DECIMALS, ZERO_ADDRESS } from '@protofire/subgraph-toolkit'
+import { bytes, decimal, DEFAULT_DECIMALS } from '@protofire/subgraph-toolkit'
 import {MakerOSM} from "../generated/templates";
 
 export function handleLogValue(event: LogValue): void {
-  MakerOSM.create(event.address);
+
   let contract = OSM.bind(Address.fromString(event.address.toHexString()));
   let price = new OSMPrice(event.address.toHexString());
   price.updatedTimeStamp = event.block.timestamp;
@@ -18,6 +18,7 @@ export function handleLogValue(event: LogValue): void {
       log.info("not an OSM", []);
       return;
   }
+  MakerOSM.create(event.address);
 
   price.medianizer = contract.src().toHex();
   let amount = decimal.max(
