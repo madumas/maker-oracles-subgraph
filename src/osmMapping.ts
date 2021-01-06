@@ -31,8 +31,6 @@ export function handleLogValue(event: LogValue): void {
   price.updatedBlockNumber = event.block.number;
   price.transactionHash = event.transaction.hash;
 
-  MakerOSMTemplate.create(event.address);
-
   let amount = decimal.max(
       decimal.ZERO,
       decimal.fromBigInt(bytes.toUnsignedInt(event.params.val), DEFAULT_DECIMALS)
@@ -54,11 +52,21 @@ export function handleKiss(call: Kiss1Call): void {
   consumer.address = consumerAddr;
   consumer.osm = osmId;
   consumer.save();
+;
 }
 
 export function handleKissNote(event: LogNote): void {
   let osmId = event.address.toHex();
-  let consumerAddr = event.params.arg2;
+  let consumerAddr = event.params.arg1;
+
+  //Is this actually an OSM?
+  let contract = OSM.bind(event.address);
+  let checkSource = contract.try_src();
+  if (checkSource.reverted) {
+    log.info("not an OSM", []);
+    return;
+  }
+
   let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
   if (consumer == null) {
     consumer = new OSMConsumer(osmId+"-"+consumerAddr.toHexString());
@@ -66,6 +74,8 @@ export function handleKissNote(event: LogNote): void {
   consumer.address = consumerAddr;
   consumer.osm = osmId;
   consumer.save();
+
+  MakerOSMTemplate.create(event.address)
 }
 
 export function handleKisses(call: KissCall): void {
