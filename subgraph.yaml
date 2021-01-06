@@ -44,7 +44,7 @@ dataSources:
           handler: handleMedianPrice
       file: ./src/medianizerMapping.ts
 templates:
-  - name: MakerOSM
+  - name: MakerOSMTemplate
     kind: ethereum/contract
     network: mainnet
     source:

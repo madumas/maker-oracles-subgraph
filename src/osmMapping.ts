@@ -4,7 +4,7 @@ import { LogValue, OSM } from '../generated/MakerOSM/OSM'
 import {Diss1Call, DissCall, Kiss1Call, KissCall} from '../generated/MakerOSM/OSM'
 import {OSMPrice, MedianizerPrice, OSMConsumer} from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS } from '@protofire/subgraph-toolkit'
-import {MakerOSM} from "../generated/templates";
+import {MakerOSMTemplate} from "../generated/templates";
 
 export function handleLogValue(event: LogValue): void {
   let contract = OSM.bind(Address.fromString(event.address.toHexString()));
@@ -30,7 +30,8 @@ export function handleLogValue(event: LogValue): void {
   price.updatedTimeStamp = event.block.timestamp;
   price.updatedBlockNumber = event.block.number;
   price.transactionHash = event.transaction.hash;
-  MakerOSM.create(event.address);
+
+  MakerOSMTemplate.create(event.address);
 
   let amount = decimal.max(
       decimal.ZERO,
