@@ -62,7 +62,7 @@ templates:
           file: ./abis/OSM.json
       callHandlers:
         - function: kiss(address)
-          handler: handleOsmKiss
+          handler: handleKiss
         - function: kiss(address[])
           handler: handleKisses
         - function: diss(address)
