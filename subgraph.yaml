@@ -44,6 +44,31 @@ dataSources:
           handler: handleMedianPrice
       file: ./src/medianizerMapping.ts
 templates:
+  - name: MakerOSM
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: OSM
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/osmMapping.ts
+      entities:
+        - OSM
+        - OSMConsumer
+      abis:
+        - name: OSM
+          file: ./abis/OSM.json
+      callHandlers:
+        - function: kiss(address)
+          handler: handleOsmKiss
+        - function: kiss(address[])
+          handler: handleKisses
+        - function: diss(address)
+          handler: handleDiss
+        - function: diss(address[])
+          handler: handleDisses
   - name: MakerMedianizer
     kind: ethereum/contract
     network: mainnet
@@ -64,31 +89,6 @@ templates:
       callHandlers:
         - function: poke(uint256[],uint256[],uint8[],bytes32[],bytes32[])
           handler: handlePoke
-        - function: kiss(address)
-          handler: handleKiss
-        - function: kiss(address[])
-          handler: handleKisses
-        - function: diss(address)
-          handler: handleDiss
-        - function: diss(address[])
-          handler: handleDisses
-  - name: MakerOSM
-    kind: ethereum/contract
-    network: mainnet
-    source:
-      abi: OSM
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/osmMapping.ts
-      entities:
-        - OSM
-        - OSMConsumer
-      abis:
-        - name: OSM
-          file: ./abis/OSM.json
-      callHandlers:
         - function: kiss(address)
           handler: handleKiss
         - function: kiss(address[])

@@ -18,7 +18,6 @@ export function handleLogValue(event: LogValue): void {
       return;
     }
     price.medianizer = contract.src().toHex();
-
   }
   let delay = BigInt.fromI32(contract.hop());
   let medianizerEntity = MedianizerPrice.load(price.medianizer);
