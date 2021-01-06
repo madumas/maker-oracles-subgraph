@@ -57,7 +57,7 @@ export function handleKiss(call: Kiss1Call): void {
 
 export function handleKissNote(event: LogNote): void {
   let osmId = event.address.toHex();
-  let consumerAddr = event.params.arg1;
+  let consumerAddr = bytes.toAddress(event.params.arg1);
 
   //Is this actually an OSM?
   let contract = OSM.bind(event.address);
