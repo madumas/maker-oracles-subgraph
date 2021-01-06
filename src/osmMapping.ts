@@ -7,37 +7,41 @@ import { bytes, decimal, DEFAULT_DECIMALS } from '@protofire/subgraph-toolkit'
 import {MakerOSM} from "../generated/templates";
 
 export function handleLogValue(event: LogValue): void {
-
   let contract = OSM.bind(Address.fromString(event.address.toHexString()));
-  let price = new OSMPrice(event.address.toHexString());
+  let price = OSMPrice.load(event.address.toHexString());
+  if (price==null) {
+    price = new OSMPrice(event.address.toHexString());
+
+    let checkSource = contract.try_src();
+    if (checkSource.reverted) {
+      log.info("not an OSM", []);
+      return;
+    }
+    price.medianizer = contract.src().toHex();
+
+  }
+  let delay = BigInt.fromI32(contract.hop());
+  let medianizerEntity = MedianizerPrice.load(price.medianizer);
+  if (medianizerEntity == null) {
+    log.info("no associated medianizer", []);
+    return;
+  } else {
+    price.nextValue = medianizerEntity.curValue;
+  }
   price.updatedTimeStamp = event.block.timestamp;
   price.updatedBlockNumber = event.block.number;
   price.transactionHash = event.transaction.hash;
-  let checkSource = contract.try_src();
-  if (checkSource.reverted) {
-      log.info("not an OSM", []);
-      return;
-  }
   MakerOSM.create(event.address);
 
-  price.medianizer = contract.src().toHex();
   let amount = decimal.max(
       decimal.ZERO,
       decimal.fromBigInt(bytes.toUnsignedInt(event.params.val), DEFAULT_DECIMALS)
   );
-  //let value = BigInt.fromUnsignedBytes(event.params.val);
   price.curValue = amount;
-  price.nextTimestamp = event.block.timestamp.plus(BigInt.fromI32(contract.hop()));
+  price.nextTimestamp = event.block.timestamp.plus(delay);
 
-  //let medianizerContract = Medianizer.bind(Address.fromString(contract.src().toHexString()));
-  let medianizerEntity = MedianizerPrice.load(contract.src().toHexString());
-  //let callResult = medianizerContract.try_wat();
-  if (medianizerEntity == null) {
-    log.info("no associated medianizer", [])
-  } else {
-    price.nextValue = medianizerEntity.curValue;
-    price.save();
-  }
+  price.save();
+
 }
 
 export function handleKiss(call: Kiss1Call): void {
@@ -66,7 +70,6 @@ export function handleKisses(call: KissCall): void {
     consumer.save();
   });
 }
-
 
 export function handleDiss(call: Diss1Call): void {
   let osmId = call.to.toHex();
