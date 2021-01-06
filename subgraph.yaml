@@ -22,6 +22,9 @@ dataSources:
       eventHandlers:
         - event: LogValue(bytes32)
           handler: handleLogValue
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xf29c29c400000000000000000000000000000000000000000000000000000000'
+          handler: handleKissNote
       file: ./src/osmMapping.ts
   - kind: ethereum/contract
     name: MakerMedianizer

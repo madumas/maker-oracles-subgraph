@@ -1,7 +1,7 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { LogValue, OSM } from '../generated/MakerOSM/OSM'
-import {Diss1Call, DissCall, Kiss1Call, KissCall} from '../generated/MakerOSM/OSM'
+import {Diss1Call, DissCall, Kiss1Call, KissCall, LogNote} from '../generated/MakerOSM/OSM'
 import {OSMPrice, MedianizerPrice, OSMConsumer} from '../generated/schema'
 import { bytes, decimal, DEFAULT_DECIMALS } from '@protofire/subgraph-toolkit'
 import {MakerOSMTemplate} from "../generated/templates";
@@ -47,6 +47,18 @@ export function handleLogValue(event: LogValue): void {
 export function handleKiss(call: Kiss1Call): void {
   let osmId = call.to.toHex();
   let consumerAddr = call.inputs.a;
+  let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
+  if (consumer == null) {
+    consumer = new OSMConsumer(osmId+"-"+consumerAddr.toHexString());
+  }
+  consumer.address = consumerAddr;
+  consumer.osm = osmId;
+  consumer.save();
+}
+
+export function handleKissNote(event: LogNote): void {
+  let osmId = event.address.toHex();
+  let consumerAddr = event.params.arg2;
   let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
   if (consumer == null) {
     consumer = new OSMConsumer(osmId+"-"+consumerAddr.toHexString());
