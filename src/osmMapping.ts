@@ -82,7 +82,7 @@ export function handleKisses(call: KissCall): void {
   let consumerAddresses = call.inputs.a;
   let osmId = call.to.toHex();
 
-  for(let i = 0; consumerAddresses.length; i++ ) {
+  for(let i = 0; i<consumerAddresses.length; i++ ) {
     let consumerAddr = consumerAddresses[i];
     let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
     if (consumer == null) {
@@ -108,7 +108,7 @@ export function handleDisses(call: DissCall): void {
   let consumerAddresses = call.inputs.a;
   let osmId = call.to.toHex();
 
-  for(let i = 0; consumerAddresses.length; i++ ) {
+  for(let i = 0; i<consumerAddresses.length; i++ ) {
     let consumerAddr = consumerAddresses[i];
     let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
     if (consumer !== null) {

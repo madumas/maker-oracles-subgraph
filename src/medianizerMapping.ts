@@ -91,16 +91,17 @@ export function handleKiss(call: Kiss1Call): void {
 export function handleKisses(call: KissCall): void {
     let consumerAddresses = call.inputs.a;
     let medianizerId = call.to.toHex();
-    for(let i = 0; consumerAddresses.length; i++ ) {
+    for(let i = 0; i<consumerAddresses.length; i++ ) {
         let consumerAddr = consumerAddresses[i];
         let consumer = MedianizerConsumer.load(medianizerId+"-"+consumerAddr.toHexString());
         if (consumer == null) {
-            consumer = new MedianizerConsumer(medianizerId+"-"+consumerAddr.toHexString());;
+            consumer = new MedianizerConsumer(medianizerId+"-"+consumerAddr.toHexString());
         }
         consumer.address = consumerAddr;
         consumer.medianizer = medianizerId;
         consumer.save();
     }
+
 }
 
 
@@ -119,7 +120,7 @@ export function handleDisses(call: DissCall): void {
     let consumerAddresses = call.inputs.a;
     let medianizerId = call.to.toHex();
 
-    for(let i = 0; consumerAddresses.length; i++ ) {
+    for(let i = 0; i<consumerAddresses.length; i++ ) {
         let consumerAddr = consumerAddresses[i];
         let consumer = MedianizerConsumer.load(medianizerId+"-"+consumerAddr.toHexString());
         if (consumer !== null) {
