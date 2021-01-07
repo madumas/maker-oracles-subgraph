@@ -89,10 +89,10 @@ export function handleKiss(call: Kiss1Call): void {
 }
 
 export function handleKisses(call: KissCall): void {
-
     let consumerAddresses = call.inputs.a;
-    consumerAddresses.forEach( consumerAddr => {
-        let medianizerId = call.to.toHex();
+    let medianizerId = call.to.toHex();
+    for(let i = 0; consumerAddresses.length; i++ ) {
+        let consumerAddr = consumerAddresses[i];
         let consumer = MedianizerConsumer.load(medianizerId+"-"+consumerAddr.toHexString());
         if (consumer == null) {
             consumer = new MedianizerConsumer(medianizerId+"-"+consumerAddr.toHexString());;
@@ -100,7 +100,7 @@ export function handleKisses(call: KissCall): void {
         consumer.address = consumerAddr;
         consumer.medianizer = medianizerId;
         consumer.save();
-    });
+    }
 }
 
 
@@ -117,12 +117,14 @@ export function handleDiss(call: Diss1Call): void {
 export function handleDisses(call: DissCall): void {
 
     let consumerAddresses = call.inputs.a;
-    consumerAddresses.forEach( consumerAddr => {
-        let medianizerId = call.to.toHex();
+    let medianizerId = call.to.toHex();
+
+    for(let i = 0; consumerAddresses.length; i++ ) {
+        let consumerAddr = consumerAddresses[i];
         let consumer = MedianizerConsumer.load(medianizerId+"-"+consumerAddr.toHexString());
         if (consumer !== null) {
             consumer.medianizer = "";
             consumer.save();
         }
-    });
+    }
 }

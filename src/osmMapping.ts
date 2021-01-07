@@ -52,7 +52,6 @@ export function handleKiss(call: Kiss1Call): void {
   consumer.address = consumerAddr;
   consumer.osm = osmId;
   consumer.save();
-;
 }
 
 export function handleKissNote(event: LogNote): void {
@@ -71,7 +70,7 @@ export function handleKissNote(event: LogNote): void {
   if (consumer == null) {
     consumer = new OSMConsumer(osmId+"-"+consumerAddr.toHexString());
   }
-  consumer.address = consumerAddr;
+  consumer.address = event.params.arg1;
   consumer.osm = osmId;
   consumer.save();
 
@@ -81,8 +80,10 @@ export function handleKissNote(event: LogNote): void {
 export function handleKisses(call: KissCall): void {
 
   let consumerAddresses = call.inputs.a;
-  consumerAddresses.forEach( consumerAddr => {
-    let osmId = call.to.toHex();
+  let osmId = call.to.toHex();
+
+  for(let i = 0; consumerAddresses.length; i++ ) {
+    let consumerAddr = consumerAddresses[i];
     let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
     if (consumer == null) {
       consumer = new OSMConsumer(osmId+"-"+consumerAddr.toHexString());;
@@ -90,7 +91,7 @@ export function handleKisses(call: KissCall): void {
     consumer.address = consumerAddr;
     consumer.osm = osmId;
     consumer.save();
-  });
+  }
 }
 
 export function handleDiss(call: Diss1Call): void {
@@ -105,12 +106,14 @@ export function handleDiss(call: Diss1Call): void {
 
 export function handleDisses(call: DissCall): void {
   let consumerAddresses = call.inputs.a;
-  consumerAddresses.forEach( consumerAddr => {
-    let osmId = call.to.toHex();
+  let osmId = call.to.toHex();
+
+  for(let i = 0; consumerAddresses.length; i++ ) {
+    let consumerAddr = consumerAddresses[i];
     let consumer = OSMConsumer.load(osmId+"-"+consumerAddr.toHexString());
     if (consumer !== null) {
       consumer.osm = "";
       consumer.save();
     }
-  });
+  }
 }
